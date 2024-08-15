@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <audio id="my-sound" src="Start1.mp3" preload="auto"></audio>
+</head>
+<body>
+    <div id="front-page">
+        <h1>Welcome to Omptimizer!</h1>
+        <p>Instructions: ...</p>
+        <button id="play-button">Play</button>
+    </div>
+
+    <div id="game-page" style="display: none;">
+        <h2>Day: <span id="day-counter">1</span>/10</h2>
+        <p>Inventory: <span id="inventory">10</span></p>
+        <p>Demand: <span id="demand">0</span></p>
+        <p>Backlog: <span id="backlog">0</span></p>
+        <p>Order: <span id="order">0</span></p>
+        <p>Score: <span id="score">0</span></p>
+        <button id="increase-order">Increase Order</button>
+        <button id="decrease-order">Decrease Order</button>
+        <button id="next-day">Next Day</button>
+    </div>
+
+    <div id="score-page" style="display: none;">
+        <input type="text" id="name-input" placeholder="Name">
+        <input type="text" id="email-input" placeholder="Email">
+        <button id="submit-score">Submit Score</button>
+    </div>
+
+    <div id="leaderboard-page" style="display: none;">
+        <div id="leaderboard"></div>
+        <button id="play-again">Play</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
