@@ -95,7 +95,7 @@ document.getElementById('submit-score').addEventListener('click', async function
     let email = document.getElementById('email-input').value;
 
     try {
-        const response = await fetch('GOOGLE_SHEET_SCRIPT', { // Replace with your Web App URL
+        const response = await fetch(GOOGLE_SHEET_SCRIPT, { // Replace with your Web App URL
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -117,7 +117,7 @@ document.getElementById('submit-score').addEventListener('click', async function
 
 async function updateLeaderboard() {
     try {
-        const response = await fetch('GOOGLE_SHEET_SCRIPT'); // Replace with your Web App URL
+        const response = await fetch(GOOGLE_SHEET_SCRIPT); // Replace with your Web App URL
         if (!response.ok) {
             throw new Error('Failed to fetch leaderboard: ' + response.statusText);
         }
