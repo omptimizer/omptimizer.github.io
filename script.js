@@ -1,4 +1,8 @@
-let GOOGLE_SHEET_SCRIPT = "https://script.google.com/macros/s/AKfycbybcj-4o8js-weDD6RVnPJYiz71cYMQ07SbV7keNcY4OLiSc5zjLiOj9X40eddab9M/exec"
+db = window.db;
+addDoc = window.addDoc;
+collection = window.collection;
+getDocs = window.getDocs;
+
 let INITIAL_INVENTORY = 10;
 
 // Initial values
@@ -95,54 +99,35 @@ document.getElementById('submit-score').addEventListener('click', async function
     let email = document.getElementById('email-input').value;
 
     try {
-        const response = await fetch(GOOGLE_SHEET_SCRIPT, { // Replace with your Web App URL
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name, email, score })
+        // Add the new score to Firestore
+        await addDoc(collection(db, "scores"), {
+            name: name,
+            email: email,
+            score: score
+        });
+        console.log("Score added to Firestore");
+
+        // Fetch and update the leaderboard from Firestore
+        const q = collection(db, "scores");
+        const querySnapshot = await getDocs(q);
+        const leaderboard = [];
+        querySnapshot.forEach((doc) => {
+            leaderboard.push(doc.data());
         });
 
-        if (response.ok) {
-            document.getElementById('score-page').style.display = 'none';
-            document.getElementById('leaderboard-page').style.display = 'flex';
-            updateLeaderboard();
-        } else {
-            console.error('Failed to submit score:', response.statusText);
-        }
+        // Update the leaderboard display
+        updateLeaderboard(leaderboard);
+        document.getElementById('score-page').style.display = 'none';
+        document.getElementById('leaderboard-page').style.display = 'flex';
     } catch (error) {
-        console.error('Error submitting score:', error);
+        console.error("Error adding score: ", error);
     }
 });
 
-async function updateLeaderboard() {
-    try {
-        const response = await fetch(GOOGLE_SHEET_SCRIPT); // Replace with your Web App URL
-        if (!response.ok) {
-            throw new Error('Failed to fetch leaderboard: ' + response.statusText);
-        }
-        const leaderboard = await response.json();
-
-        let leaderboardDiv = document.getElementById('leaderboard');
-        leaderboardDiv.innerHTML = '';
-        for (let i = 0; i < leaderboard.length; i++) {
-            leaderboardDiv.innerHTML += '<p>' + leaderboard[i].name + ': ' + leaderboard[i].score + '</p>';
-        }
-    } catch (error) {
-        console.error('Error updating leaderboard:', error);
-    }
-}
-
-
-
-
-/*
-let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-function updateLeaderboard_offline() {
+function updateLeaderboard(leaderboard) {
     let leaderboardDiv = document.getElementById('leaderboard');
     leaderboardDiv.innerHTML = '';
     for (let i = 0; i < leaderboard.length; i++) {
         leaderboardDiv.innerHTML += '<p>' + leaderboard[i].name + ': ' + leaderboard[i].score + '</p>';
     }
 }
-*/

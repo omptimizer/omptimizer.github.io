@@ -1,39 +1,61 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <!--<audio id="my-sound" src="Start1.mp3" preload="auto"></audio>-->
-</head>
-<body>
-    <div id="front-page">
-        <h1>Welcome to Omptimizer!</h1>
-        <p>Instructions: ...</p>
-        <button id="play-button">Play</button>
-    </div>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <title>Omptimizer</title>
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+            import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    <div id="game-page" style="display: none;">
-        <h2>Day: <span id="day-counter">1</span>/10</h2>
-        <p>Inventory: <span id="inventory">10</span></p>
-        <p>Demand: <span id="demand">0</span></p>
-        <p>Backlog: <span id="backlog">0</span></p>
-        <p>Order: <span id="order">0</span></p>
-        <p>Score: <span id="score">0</span></p>
-        <button id="increase-order">Increase Order</button>
-        <button id="decrease-order">Decrease Order</button>
-        <button id="next-day">Next Day</button>
-    </div>
+            const firebaseConfig = {
+            apiKey: "AIzaSyB4y7ZUpkbg0_6eFxx0e8PxiTjCWtjlpDU",
+            authDomain: "optimizer-c8f92.firebaseapp.com",
+            projectId: "optimizer-c8f92",
+            storageBucket: "optimizer-c8f92.appspot.com",
+            messagingSenderId: "29514496270",
+            appId: "1:29514496270:web:5bb3df8ed4c94fda113f5f"
+            };
 
-    <div id="score-page" style="display: none;">
-        <input type="text" id="name-input" placeholder="Name">
-        <input type="text" id="email-input" placeholder="Email">
-        <button id="submit-score">Submit Score</button>
-    </div>
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
 
-    <div id="leaderboard-page" style="display: none;">
-        <div id="leaderboard"></div>
-        <button id="play-again">Play</button>
-    </div>
+            // Assign the Firestore instance to a global variable
+            window.db = db;
+            window.addDoc = addDoc;
+            window.collection = collection;
+            window.getDocs = getDocs;
+        </script>
+        <!--<audio id="my-sound" src="Start1.mp3" preload="auto"></audio>-->
+    </head>
+    <body>
+        <div id="front-page">
+            <h1>Welcome to Omptimizer!</h1>
+            <p>Instructions: ...</p>
+            <button id="play-button">Play</button>
+        </div>
 
-    <script src="script.js"></script>
-</body>
+        <div id="game-page" style="display: none;">
+            <h2>Day: <span id="day-counter">1</span>/10</h2>
+            <p>Inventory: <span id="inventory">10</span></p>
+            <p>Demand: <span id="demand">0</span></p>
+            <p>Backlog: <span id="backlog">0</span></p>
+            <p>Order: <span id="order">0</span></p>
+            <p>Score: <span id="score">0</span></p>
+            <button id="increase-order">Increase Order</button>
+            <button id="decrease-order">Decrease Order</button>
+            <button id="next-day">Next Day</button>
+        </div>
+
+        <div id="score-page" style="display: none;">
+            <input type="text" id="name-input" placeholder="Name">
+            <input type="text" id="email-input" placeholder="Email">
+            <button id="submit-score">Submit Score</button>
+        </div>
+
+        <div id="leaderboard-page" style="display: none;">
+            <div id="leaderboard"></div>
+            <button id="play-again">Play</button>
+        </div>
+        <script src="script.js"></script>
+    </body>
 </html>
