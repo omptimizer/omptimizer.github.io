@@ -5,7 +5,7 @@
         <title>Omptimizer</title>
         <script type="module">
             import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-            import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+            import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
             const firebaseConfig = {
             apiKey: "AIzaSyB4y7ZUpkbg0_6eFxx0e8PxiTjCWtjlpDU",
@@ -24,6 +24,9 @@
             window.addDoc = addDoc;
             window.collection = collection;
             window.getDocs = getDocs;
+            window.query = query;
+            window.orderBy = orderBy;
+            window.limit = limit;
         </script>
         <!--<audio id="my-sound" src="Start1.mp3" preload="auto"></audio>-->
     </head>

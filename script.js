@@ -2,6 +2,9 @@ db = window.db;
 addDoc = window.addDoc;
 collection = window.collection;
 getDocs = window.getDocs;
+query = window.query;
+orderBy = window.orderBy;
+limit = window.limit;
 
 let INITIAL_INVENTORY = 10;
 
@@ -108,7 +111,7 @@ document.getElementById('submit-score').addEventListener('click', async function
         console.log("Score added to Firestore");
 
         // Fetch and update the leaderboard from Firestore
-        const q = collection(db, "scores");
+        const q = query(collection(db, "scores"), orderBy("score", "desc"), limit(15));
         const querySnapshot = await getDocs(q);
         const leaderboard = [];
         querySnapshot.forEach((doc) => {
