@@ -62,7 +62,11 @@ document.getElementById('next-day').addEventListener('click', function() {
         demand = Math.floor(Math.random() * 10); // Random demand
         let fulfilled = Math.min(inventory, demand + backlog);
         inventory -= fulfilled;
+        let oldBacklog = backlog;
         backlog = demand + backlog - fulfilled;
+
+        // Calculate old score
+        let oldScore = score;
 
         // Update score
         score += fulfilled * SALE_POINTS;
@@ -73,9 +77,8 @@ document.getElementById('next-day').addEventListener('click', function() {
         day++;
 
         // Update inventory from order
-        let supply = Math.floor(Math.random() * 20); // Random demand
+        let supply = Math.floor(Math.random() * 20); // Random supply
         inventory += Math.min(order, supply);
-
 
         // Update display
         document.getElementById('day-counter').textContent = day;
@@ -84,10 +87,39 @@ document.getElementById('next-day').addEventListener('click', function() {
         document.getElementById('backlog').textContent = backlog;
         document.getElementById('order').textContent = order;
         document.getElementById('score').textContent = score;
+
+        // Update score breakdown
+        updateScoreBreakdown(fulfilled, inventory, backlog);
+        // Show the score breakdown if it's day 1 or later
+        if (day === 2) {
+            document.getElementById('score-breakdown').style.display = 'block';
+        }
+
+        // Highlight score change
+        let scoreElement = document.getElementById('score');
+        scoreElement.style.color = score > oldScore ? 'green' : 'red';
+        setTimeout(() => {
+            scoreElement.style.color = 'black';
+        }, 1000);
+        
+    } else if (day == 10) {
+        // Hide order buttons
+        const orderButtons = document.querySelectorAll('.order-button');
+        orderButtons.forEach(button => button.style.display = 'none');
+
+        // Change Next Day button text
+        const nextDayButton = document.getElementById('next-day');
+        nextDayButton.textContent = 'Submit Score';
+
+        day++;
     } else {
         // End of game, show score page
         document.getElementById('game-page').style.display = 'none';
         document.getElementById('score-page').style.display = 'flex';
+
+        // Reset Next Day button text
+        const nextDayButton = document.getElementById('next-day');
+        nextDayButton.textContent = 'Next Day';
     }
 });
 
@@ -133,4 +165,20 @@ function updateLeaderboard(leaderboard) {
     for (let i = 0; i < leaderboard.length; i++) {
         leaderboardDiv.innerHTML += '<p>' + leaderboard[i].name + ': ' + leaderboard[i].score + '</p>';
     }
+}
+
+function updateScoreBreakdown(fulfilled, inventory, backlog) {
+    let scoreBreakdown = document.getElementById('score-breakdown');
+    let salesScore = fulfilled * SALE_POINTS;
+    let storageCost = inventory * STORAGE_COST;
+    let backlogCost = backlog * BACKLOG_COST;
+    
+    scoreBreakdown.innerHTML = `
+        <p>Sales: <span style="color: green;">+${salesScore}</span></p>
+        <p>Storage Cost: <span style="color: red;">-${storageCost}</span></p>
+        <p>Backlog Cost: <span style="color: red;">-${backlogCost}</span></p>
+        <p>Net Change: <span style="color: ${salesScore - storageCost - backlogCost >= 0 ? 'green' : 'red'};">
+            ${salesScore - storageCost - backlogCost >= 0 ? '+' : ''}${salesScore - storageCost - backlogCost}
+        </span></p>
+    `;
 }

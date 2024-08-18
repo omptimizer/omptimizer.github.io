@@ -28,12 +28,29 @@
             window.orderBy = orderBy;
             window.limit = limit;
         </script>
+
         <!--<audio id="my-sound" src="Start1.mp3" preload="auto"></audio>-->
     </head>
     <body>
         <div id="front-page">
             <h1>Welcome to Omptimizer!</h1>
-            <p>Instructions: ...</p>
+            <div id="instructions">
+                <h2>How to Play</h2>
+                <ol>
+                    <li>You are managing inventory for 10 days.</li>
+                    <li>Each day, you'll see your current inventory and the demand.</li>
+                    <li>Your goal is to maximize your score by balancing inventory and meeting demand.</li>
+                    <li>Use the "Increase Order" and "Decrease Order" buttons to set your order for the next day.</li>
+                    <li>Click "Next Day" to proceed and see the results.</li>
+                </ol>
+                <h3>Scoring</h3>
+                <ul>
+                    <li>You earn 7 points for each item sold.</li>
+                    <li>You lose 2 points for each item in inventory (storage cost).</li>
+                    <li>You lose 4 points for each unfulfilled demand (backlog cost).</li>
+                </ul>
+                <p>Try to achieve the highest score possible over the 10-day period!</p>
+            </div>
             <button id="play-button">Play</button>
         </div>
 
@@ -44,9 +61,15 @@
             <p>Backlog: <span id="backlog">0</span></p>
             <p>Order: <span id="order">0</span></p>
             <p>Score: <span id="score">0</span></p>
-            <button id="increase-order">Increase Order</button>
-            <button id="decrease-order">Decrease Order</button>
+            <ul>
+                <li>You earn 7 points for each item sold.</li>
+                <li>You lose 2 points for each item in inventory (storage cost).</li>
+                <li>You lose 4 points for each unfulfilled demand (backlog cost).</li>
+            </ul>
+            <button id="increase-order" class="order-button">Increase Order</button>
+            <button id="decrease-order" class="order-button">Decrease Order</button>
             <button id="next-day">Next Day</button>
+            <div id="score-breakdown" style="display: none;"></div>
         </div>
 
         <div id="score-page" style="display: none;">
