@@ -20,7 +20,7 @@ let order = 0;
 // Score constants
 let SALE_POINTS = 7;
 let STORAGE_COST = 2;
-let BACKLOG_COST = 4;
+let BACKLOG_COST = 5;
 
 document.getElementById('play-button').addEventListener('click', function() {
     day = 1;
