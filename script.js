@@ -11,7 +11,7 @@ let INITIAL_INVENTORY = 10;
 // Initial values
 let day = 1;
 let inventory = INITIAL_INVENTORY;
-let demand = Math.floor(Math.random() * 10);
+let demand = 0;
 let backlog = 0;
 let score = 0;
 let order = 0;
@@ -63,10 +63,8 @@ document.getElementById('decrease-order').addEventListener('click', function() {
 document.getElementById('next-day').addEventListener('click', function() {
     if (day < 10) {
         // Update inventory and backlog
-        demand = Math.floor(Math.random() * 10); // Random demand
         let fulfilled = Math.min(inventory, demand + backlog);
         inventory -= fulfilled;
-        let oldBacklog = backlog;
         backlog = demand + backlog - fulfilled;
 
         // Calculate old score
@@ -85,6 +83,7 @@ document.getElementById('next-day').addEventListener('click', function() {
         }
 
         // Update day
+        demand = Math.floor(Math.random() * 10); // Random demand
         day++;
 
         // Update inventory from order
