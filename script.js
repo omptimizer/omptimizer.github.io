@@ -22,6 +22,8 @@ let SALE_POINTS = 7;
 let STORAGE_COST = 2;
 let BACKLOG_COST = 5;
 
+document.body.className = 'front-page-bg';
+
 document.getElementById('play-button').addEventListener('click', function() {
     day = 1;
     inventory = INITIAL_INVENTORY;
@@ -40,8 +42,10 @@ document.getElementById('play-button').addEventListener('click', function() {
 
     document.getElementById('front-page').style.display = 'none';
     document.getElementById('game-page').style.display = 'flex';
-    //document.getElementById('my-sound').play();
+    
+    document.getElementById('game-start').play();
 
+    document.body.className = 'game-page-bg'; // When showing front page
 });
 
 document.getElementById('increase-order').addEventListener('click', function() {
@@ -66,12 +70,19 @@ document.getElementById('next-day').addEventListener('click', function() {
         backlog = demand + backlog - fulfilled;
 
         // Calculate old score
-        let oldScore = score;
+        let score_change = 0;
 
         // Update score
-        score += fulfilled * SALE_POINTS;
-        score -= inventory * STORAGE_COST;
-        score -= backlog * BACKLOG_COST;
+        score_change += fulfilled * SALE_POINTS;
+        score_change -= inventory * STORAGE_COST;
+        score_change -= backlog * BACKLOG_COST;
+        score += score_change;
+
+        if (score_change > 0) {
+            document.getElementById('points-earned').play();
+        } else if (score_change < 0) {
+            document.getElementById('points-lost').play();
+        }
 
         // Update day
         day++;
@@ -126,6 +137,7 @@ document.getElementById('next-day').addEventListener('click', function() {
 document.getElementById('play-again').addEventListener('click', function() {
     document.getElementById('game-page').style.display = 'none';
     document.getElementById('front-page').style.display = 'flex';
+    document.body.className = 'front-page-bg';
 });
 
 
@@ -154,6 +166,7 @@ document.getElementById('submit-score').addEventListener('click', async function
         updateLeaderboard(leaderboard);
         document.getElementById('score-page').style.display = 'none';
         document.getElementById('leaderboard-page').style.display = 'flex';
+        ocument.getElementById('leaderboard-show').play();
     } catch (error) {
         console.error("Error adding score: ", error);
     }

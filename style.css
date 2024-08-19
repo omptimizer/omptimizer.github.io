@@ -117,3 +117,25 @@ input[type="text"] {
     margin-top: 20px; /* Space above the box */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
+
+body {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+}
+
+#front-page, #game-page, #score-page, #leaderboard-page {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px;
+}
+
+body.front-page-bg {
+    background-image: url('images/front-page.png');
+}
+
+body.game-page-bg {
+    background-image: url('images/game-page.png');
+}
