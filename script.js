@@ -1,3 +1,4 @@
+// Imports
 db = window.db;
 addDoc = window.addDoc;
 collection = window.collection;
@@ -6,7 +7,13 @@ query = window.query;
 orderBy = window.orderBy;
 limit = window.limit;
 
-let INITIAL_INVENTORY = 10;
+// Score constants
+const INITIAL_INVENTORY = 10;
+const MAX_PAST_ORDERS = 3; // Number of past orders to consider
+const SALE_POINTS = 7;
+const STORAGE_COST = 2;
+const BACKLOG_COST = 5;
+const BULLWHIP_EFFECT = true;
 
 // Initial values
 let day = 1;
@@ -15,13 +22,7 @@ let demand = 0;
 let backlog = 0;
 let score = 0;
 let order = 0;
-
-
-// Score constants
-let SALE_POINTS = 7;
-let STORAGE_COST = 2;
-let BACKLOG_COST = 5;
-
+let pastOrders = [];
 document.body.className = 'front-page-bg';
 
 document.getElementById('play-button').addEventListener('click', function() {
@@ -31,6 +32,7 @@ document.getElementById('play-button').addEventListener('click', function() {
     backlog = 0;
     score = 0;
     order = 0;
+    pastOrders = [];
 
     // Update display
     document.getElementById('day-counter').textContent = day;
@@ -87,7 +89,18 @@ document.getElementById('next-day').addEventListener('click', function() {
         // Update day
         demand = Math.floor(Math.random() * 10); // Random demand
         day++;
+
+        // Update inventory from order
         let supply = Math.floor(Math.random() * 20); // Random supply
+        if (BULLWHIP_EFFECT) {
+            supply = calculateSupply(order);
+        }
+
+        // Update past orders
+        pastOrders.push(order);
+        if (pastOrders.length > MAX_PAST_ORDERS) {
+            pastOrders.shift(); // Remove the oldest order
+        }
 
         // Update score breakdown
         updateScoreBreakdown(fulfilled, inventory, backlog, order, supply);
@@ -204,4 +217,26 @@ function updateScoreBreakdown(fulfilled, inventory, backlog, order, supply) {
     }
     
     scoreBreakdown.innerHTML = breakdownHTML;
+}
+
+function calculateSupply(currentOrder) {
+    // Update past orders with the current day's order
+    pastOrders.push(currentOrder);
+    if (pastOrders.length > MAX_PAST_ORDERS) {
+        pastOrders.shift(); // Remove the oldest order
+    }
+
+    if (pastOrders.length === 0) {
+        // If no past orders, use a random supply logic
+        return Math.floor(Math.random() * 20);
+    }
+
+    // Calculate the average of past orders
+    let avgPastOrder = pastOrders.reduce((a, b) => a + b, 0) / pastOrders.length;
+
+    // Calculate the supply based on past orders with some variation
+    let baseSupply = avgPastOrder * (0.8 + Math.random() * 0.4); // 80% to 120% of average past order
+
+    // Ensure the supply doesn't exceed the current order
+    return Math.floor(Math.min(currentOrder, baseSupply));
 }
