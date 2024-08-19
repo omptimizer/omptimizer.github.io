@@ -86,6 +86,9 @@ document.getElementById('next-day').addEventListener('click', function() {
         demand = Math.floor(Math.random() * 10); // Random demand
         day++;
 
+        // Update score breakdown
+        updateScoreBreakdown(fulfilled, inventory, backlog);
+
         // Update inventory from order
         let supply = Math.floor(Math.random() * 20); // Random supply
         inventory += Math.min(order, supply);
@@ -98,8 +101,6 @@ document.getElementById('next-day').addEventListener('click', function() {
         document.getElementById('order').textContent = order;
         document.getElementById('score').textContent = score;
 
-        // Update score breakdown
-        updateScoreBreakdown(fulfilled, inventory, backlog);
         // Show the score breakdown if it's day 1 or later
         if (day === 2) {
             document.getElementById('score-breakdown').style.display = 'block';
