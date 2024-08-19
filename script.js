@@ -40,6 +40,8 @@ document.getElementById('play-button').addEventListener('click', function() {
     document.getElementById('order').textContent = order;
     document.getElementById('score').textContent = score;
 
+    document.getElementById('score-breakdown').style.display = 'none';
+
     document.getElementById('front-page').style.display = 'none';
     document.getElementById('game-page').style.display = 'flex';
     
