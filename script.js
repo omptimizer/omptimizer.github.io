@@ -85,12 +85,12 @@ document.getElementById('next-day').addEventListener('click', function() {
         // Update day
         demand = Math.floor(Math.random() * 10); // Random demand
         day++;
+        let supply = Math.floor(Math.random() * 20); // Random supply
 
         // Update score breakdown
-        updateScoreBreakdown(fulfilled, inventory, backlog);
+        updateScoreBreakdown(fulfilled, inventory, backlog, order, supply);
 
         // Update inventory from order
-        let supply = Math.floor(Math.random() * 20); // Random supply
         inventory += Math.min(order, supply);
 
         // Update display
@@ -108,7 +108,7 @@ document.getElementById('next-day').addEventListener('click', function() {
 
         // Highlight score change
         let scoreElement = document.getElementById('score');
-        scoreElement.style.color = score > oldScore ? 'green' : 'red';
+        scoreElement.style.color = score_change < 0 ? 'red' : 'green';
         setTimeout(() => {
             scoreElement.style.color = 'black';
         }, 1000);
@@ -166,7 +166,7 @@ document.getElementById('submit-score').addEventListener('click', async function
         updateLeaderboard(leaderboard);
         document.getElementById('score-page').style.display = 'none';
         document.getElementById('leaderboard-page').style.display = 'flex';
-        ocument.getElementById('leaderboard-show').play();
+        document.getElementById('leaderboard-show').play();
     } catch (error) {
         console.error("Error adding score: ", error);
     }
@@ -180,13 +180,13 @@ function updateLeaderboard(leaderboard) {
     }
 }
 
-function updateScoreBreakdown(fulfilled, inventory, backlog) {
+function updateScoreBreakdown(fulfilled, inventory, backlog, order, supply) {
     let scoreBreakdown = document.getElementById('score-breakdown');
     let salesScore = fulfilled * SALE_POINTS;
     let storageCost = inventory * STORAGE_COST;
     let backlogCost = backlog * BACKLOG_COST;
     
-    scoreBreakdown.innerHTML = `
+    let breakdownHTML = `
         <p>Sales: <span style="color: green;">+${salesScore}</span></p>
         <p>Storage Cost: <span style="color: red;">-${storageCost}</span></p>
         <p>Backlog Cost: <span style="color: red;">-${backlogCost}</span></p>
@@ -194,4 +194,12 @@ function updateScoreBreakdown(fulfilled, inventory, backlog) {
             ${salesScore - storageCost - backlogCost >= 0 ? '+' : ''}${salesScore - storageCost - backlogCost}
         </span></p>
     `;
+
+    if (supply < order) {
+        breakdownHTML += `
+            <p style="color: orange;">Oh no, our supplier ran out! We ordered ${order} but only received ${supply}.</p>
+        `;
+    }
+    
+    scoreBreakdown.innerHTML = breakdownHTML;
 }
