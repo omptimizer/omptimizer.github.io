@@ -194,6 +194,7 @@ document.getElementById('submit-score').addEventListener('click', async function
         document.getElementById('leaderboard-show').play();
     } catch (error) {
         console.error("Error adding score: ", error);
+        alert("Enter valid Code.");
     }
 });
 
