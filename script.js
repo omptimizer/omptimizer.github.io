@@ -22,6 +22,7 @@ let demand = 0;
 let backlog = 0;
 let score = 0;
 let order = 0;
+let code = "0000";
 let pastOrders = [];
 document.body.className = 'front-page-bg';
 
@@ -159,18 +160,27 @@ document.getElementById('play-again').addEventListener('click', function() {
 document.getElementById('submit-score').addEventListener('click', async function() {
     let name = document.getElementById('name-input').value;
     let email = document.getElementById('email-input').value;
+    code = document.getElementById('code-input').value;
+
+    // Validate inputs
+    if (!name || !email || !code) {
+        alert("Please fill in all fields correctly.");
+        return;
+    }
 
     try {
         // Add the new score to Firestore
-        await addDoc(collection(db, "scores"), {
+        const collectionName = code;
+        await addDoc(collection(db, collectionName), {
             name: name,
             email: email,
-            score: score
+            score: score,
+            code: code
         });
         console.log("Score added to Firestore");
 
         // Fetch and update the leaderboard from Firestore
-        const q = query(collection(db, "scores"), orderBy("score", "desc"), limit(15));
+        const q = query(collection(db, collectionName), orderBy("score", "desc"), limit(15));
         const querySnapshot = await getDocs(q);
         const leaderboard = [];
         querySnapshot.forEach((doc) => {
