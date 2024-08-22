@@ -14,6 +14,8 @@ const SALE_POINTS = 7;
 const STORAGE_COST = 2;
 const BACKLOG_COST = 5;
 const BULLWHIP_EFFECT = true;
+const STARTING_EXPECTED_SUPPLY = 7;
+const SMOOTHENING_FACTOR = 0.65;
 
 // Initial values
 let day = 1;
@@ -23,6 +25,7 @@ let backlog = 0;
 let score = 0;
 let order = 0;
 let code = "0000";
+let expectedSupply = STARTING_EXPECTED_SUPPLY;
 let pastOrders = [];
 document.body.className = 'front-page-bg';
 
@@ -33,6 +36,7 @@ document.getElementById('play-button').addEventListener('click', function() {
     backlog = 0;
     score = 0;
     order = 0;
+    expectedSupply = STARTING_EXPECTED_SUPPLY;
     pastOrders = [];
 
     // Update display
@@ -231,22 +235,11 @@ function updateScoreBreakdown(fulfilled, inventory, backlog, order, supply) {
 }
 
 function calculateSupply(currentOrder) {
-    // Update past orders with the current day's order
-    pastOrders.push(currentOrder);
-    if (pastOrders.length > MAX_PAST_ORDERS) {
-        pastOrders.shift(); // Remove the oldest order
-    }
-
-    if (pastOrders.length === 0) {
-        // If no past orders, use a random supply logic
-        return Math.floor(Math.random() * 20);
-    }
-
-    // Calculate the average of past orders
-    let avgPastOrder = pastOrders.reduce((a, b) => a + b, 0) / pastOrders.length;
-
-    // Calculate the supply based on past orders with some variation
-    let baseSupply = avgPastOrder * (0.8 + Math.random() * 0.4); // 80% to 120% of average past order
+    let randomValue = Math.sqrt(-2 * Math.log(Math.random())) * Math.cos(2 * Math.PI * Math.random());
+    let deviation = 1;
+    let baseSupply = expectedSupply + deviation * randomValue;
+    
+    expectedSupply = (SMOOTHENING_FACTOR)*expectedSupply+(1-SMOOTHENING_FACTOR)*currentOrder;
 
     // Ensure the supply doesn't exceed the current order
     return Math.floor(Math.min(currentOrder, baseSupply));
