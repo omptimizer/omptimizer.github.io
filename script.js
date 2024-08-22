@@ -155,7 +155,7 @@ document.getElementById('next-day').addEventListener('click', function() {
 });
 
 document.getElementById('play-again').addEventListener('click', function() {
-    document.getElementById('game-page').style.display = 'none';
+	document.getElementById('leaderboard-page').style.display = 'none';
     document.getElementById('front-page').style.display = 'flex';
     document.body.className = 'front-page-bg';
 });
