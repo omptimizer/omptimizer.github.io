@@ -242,5 +242,5 @@ function calculateSupply(currentOrder) {
     expectedSupply = (SMOOTHENING_FACTOR)*expectedSupply+(1-SMOOTHENING_FACTOR)*currentOrder;
 
     // Ensure the supply doesn't exceed the current order
-    return Math.floor(Math.min(currentOrder, baseSupply));
+    return Math.max(0, Math.floor(Math.min(currentOrder, baseSupply)));
 }
